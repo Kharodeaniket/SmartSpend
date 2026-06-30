@@ -1,0 +1,52 @@
+:root {
+    --primary-green: #198754;
+    --primary-green-dark: #146c43;
+    --light-bg: #f4f9f6;
+    --card-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+
+body {
+    background-color: var(--light-bg);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.auth-card {
+    border: none;
+    border-radius: 16px;
+    box-shadow: var(--card-shadow);
+}
+
+.auth-card h3 {
+    color: var(--primary-green-dark);
+    font-weight: 600;
+}
+
+.form-control, .form-select {
+    border-radius: 8px;
+    border: 1px solid #d1e0d8;
+    padding: 10px 14px;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.15);
+}
+
+.btn-primary {
+    background-color: var(--primary-green);
+    border-color: var(--primary-green);
+    border-radius: 8px;
+    padding: 10px;
+    font-weight: 500;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-green-dark);
+    border-color: var(--primary-green-dark);
+}
+
+label {
+    font-weight: 500;
+    color: #2d3a32;
+    margin-bottom: 4px;
+}

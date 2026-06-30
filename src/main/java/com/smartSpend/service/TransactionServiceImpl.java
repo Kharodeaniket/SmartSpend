@@ -1,6 +1,7 @@
 package com.smartSpend.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -102,6 +103,40 @@ public class TransactionServiceImpl implements TransactionService {
 
 		
 		return catWiseExp;
+	}
+
+	@Override
+	public Map<String, Object> getLastThreeMonthsData(String email) {
+	    User user = userRepo.findByEmail(email).orElse(null);
+	    LocalDate now = LocalDate.now();
+
+	    List<String> months = new ArrayList<>();
+	    List<Double> incomeList = new ArrayList<>();
+	    List<Double> expenseList = new ArrayList<>();
+
+	    for (int i = 2; i >= 0; i--) {
+	        LocalDate monthDate = now.minusMonths(i);
+	        int month = monthDate.getMonthValue();
+	        int year = monthDate.getYear();
+	        String monthName = monthDate.getMonth().toString(); // e.g. "APRIL"
+
+	        Double income = transactionrepo.getTotalByUserAndTypeAndMonth(user, CategoryType.INCOME, month, year);
+	        Double expense = transactionrepo.getTotalByUserAndTypeAndMonth(user, CategoryType.EXPENSE, month, year);
+
+	        if (income == null) income = 0.0;
+	        if (expense == null) expense = 0.0;
+
+	        months.add(monthName);
+	        incomeList.add(income);
+	        expenseList.add(expense);
+	    }
+
+	    Map<String, Object> result = new HashMap<>();
+	    result.put("months", months);
+	    result.put("income", incomeList);
+	    result.put("expense", expenseList);
+
+	    return result;
 	}
 	
 	

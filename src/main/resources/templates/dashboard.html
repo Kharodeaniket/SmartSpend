@@ -4,66 +4,409 @@
 <head>
 	<title>SmartSpend - Dashboard</title>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+	<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<style>
+		:root{
+			--ink:#0f1f17;
+			--green-900:#0b3d2e;
+			--green-700:#15803d;
+			--green-500:#22a55c;
+			--green-100:#e7f5ec;
+			--paper:#f6f8f6;
+			--card:#ffffff;
+			--line:#e3e9e4;
+			--muted:#5b6b60;
+			--expense:#d9534f;
+			--radius:14px;
+		}
+		*{box-sizing:border-box;}
+		body{
+			margin:0;
+			background:var(--paper);
+			font-family:'Manrope',sans-serif;
+			color:var(--ink);
+		}
+		.sidebar{
+			width:240px;
+			min-height:100vh;
+			background:var(--green-900);
+			color:#fff;
+			position:fixed;
+			top:0;left:0;
+			display:flex;
+			flex-direction:column;
+			padding:28px 20px;
+		}
+		.brand{
+			display:flex;
+			align-items:center;
+			gap:10px;
+			margin-bottom:40px;
+		}
+		.brand-mark{
+			width:34px;height:34px;
+			border-radius:9px;
+			background:var(--green-500);
+			display:flex;align-items:center;justify-content:center;
+			font-weight:800;
+			font-size:16px;
+		}
+		.brand-name{font-weight:700;font-size:17px;letter-spacing:-0.3px;}
+		.nav-section-label{
+			font-size:11px;
+			letter-spacing:1px;
+			text-transform:uppercase;
+			color:#9fc4ad;
+			margin:18px 0 8px 8px;
+		}
+		.nav-link-item{
+			display:flex;
+			align-items:center;
+			gap:12px;
+			padding:10px 12px;
+			border-radius:10px;
+			color:#d9ece1;
+			text-decoration:none;
+			font-size:14.5px;
+			font-weight:500;
+			margin-bottom:2px;
+			transition:background .15s;
+		}
+		.nav-link-item:hover{background:rgba(255,255,255,0.08);color:#fff;}
+		.nav-icon{width:18px;text-align:center;font-size:15px;}
+		.sidebar-foot{
+			margin-top:auto;
+			padding-top:16px;
+			border-top:1px solid rgba(255,255,255,0.12);
+		}
+		.logout-btn{
+			width:100%;
+			background:rgba(217,83,79,0.18);
+			color:#ffb4b1;
+			border:none;
+			border-radius:10px;
+			padding:10px;
+			font-weight:600;
+			font-size:14px;
+			cursor:pointer;
+		}
+		.logout-btn:hover{background:rgba(217,83,79,0.3);}
+		.main{
+			margin-left:240px;
+			padding:32px 40px 60px;
+		}
+		.topbar{
+			display:flex;
+			justify-content:space-between;
+			align-items:flex-start;
+			margin-bottom:28px;
+		}
+		.greeting-eyebrow{
+			font-size:12.5px;
+			color:var(--muted);
+			margin-bottom:4px;
+			font-weight:600;
+			letter-spacing:0.3px;
+			text-transform:uppercase;
+		}
+		.greeting-title{
+			font-size:26px;
+			font-weight:800;
+			letter-spacing:-0.5px;
+		}
+		.user-chip{
+			display:flex;
+			align-items:center;
+			gap:10px;
+			background:var(--card);
+			border:1px solid var(--line);
+			padding:8px 14px 8px 8px;
+			border-radius:30px;
+		}
+		.avatar{
+			width:32px;height:32px;
+			border-radius:50%;
+			background:var(--green-100);
+			color:var(--green-700);
+			display:flex;align-items:center;justify-content:center;
+			font-weight:700;
+			font-size:13px;
+		}
+		.user-chip span{font-size:13.5px;font-weight:600;}
+		.summary-row{
+			display:grid;
+			grid-template-columns:repeat(3,1fr);
+			gap:18px;
+			margin-bottom:24px;
+		}
+		.sum-card{
+			background:var(--card);
+			border:1px solid var(--line);
+			border-radius:var(--radius);
+			padding:22px 22px 20px;
+			position:relative;
+			overflow:hidden;
+		}
+		.sum-card::before{
+			content:"";
+			position:absolute;
+			top:0;left:0;
+			width:4px;height:100%;
+		}
+		.sum-card.income::before{background:var(--green-500);}
+		.sum-card.expense::before{background:var(--expense);}
+		.sum-card.balance::before{background:#1d4ed8;}
+		.sum-label{
+			font-size:12.5px;
+			color:var(--muted);
+			font-weight:600;
+			text-transform:uppercase;
+			letter-spacing:.4px;
+			margin-bottom:10px;
+			display:flex;
+			align-items:center;
+			justify-content:space-between;
+		}
+		.sum-icon{
+			width:30px;height:30px;
+			border-radius:8px;
+			display:flex;align-items:center;justify-content:center;
+			font-size:14px;
+		}
+		.income .sum-icon{background:var(--green-100);color:var(--green-700);}
+		.expense .sum-icon{background:#fbe9e8;color:var(--expense);}
+		.balance .sum-icon{background:#e7edfc;color:#1d4ed8;}
+		.sum-value{
+			font-size:28px;
+			font-weight:800;
+			font-family:'DM Mono',monospace;
+			letter-spacing:-0.5px;
+		}
+		.sum-sub{
+			font-size:12px;
+			color:var(--muted);
+			margin-top:4px;
+		}
+		.charts-row{
+			display:grid;
+			grid-template-columns:1.1fr 1.4fr;
+			gap:18px;
+			margin-bottom:24px;
+		}
+		.chart-card{
+			background:var(--card);
+			border:1px solid var(--line);
+			border-radius:var(--radius);
+			padding:22px;
+		}
+		.chart-card-head{
+			display:flex;
+			justify-content:space-between;
+			align-items:baseline;
+			margin-bottom:16px;
+		}
+		.chart-title{font-size:15px;font-weight:700;}
+		.chart-period{font-size:12px;color:var(--muted);}
+		.chart-wrap{position:relative;height:240px;}
+		.quick-actions{
+			display:grid;
+			grid-template-columns:repeat(4,1fr);
+			gap:14px;
+		}
+		.action-card{
+			background:var(--card);
+			border:1px solid var(--line);
+			border-radius:12px;
+			padding:16px;
+			text-decoration:none;
+			color:var(--ink);
+			display:flex;
+			align-items:center;
+			gap:12px;
+			transition:transform .12s, border-color .12s;
+		}
+		.action-card:hover{transform:translateY(-2px); border-color:var(--green-500); color:var(--ink);}
+		.action-ic{
+			width:36px;height:36px;
+			border-radius:9px;
+			background:var(--green-100);
+			color:var(--green-700);
+			display:flex;align-items:center;justify-content:center;
+			font-size:15px;
+			flex-shrink:0;
+		}
+		.action-text-label{font-size:13.5px;font-weight:600;}
+		.action-text-sub{font-size:11.5px;color:var(--muted);}
+		@media (max-width: 900px){
+			.sidebar{display:none;}
+			.main{margin-left:0; padding:20px;}
+			.summary-row, .charts-row, .quick-actions{grid-template-columns:1fr;}
+		}
+	</style>
 </head>
 
 <body>
-	<div class="container mt-4">
-		<h2>Welcome to SmartSpend</h2>
-		<p th:text="'Hello, ' + ${username}">Hello User</p>
-		<a th:href="@{/transaction}">Add transaction</a> <br>
-		<a th:href="@{/transaction/list}">Show transaction</a> <br>
-		<a th:href="@{/budget}">Add Budget For month</a><br>
-		<a th:href="@{/showBudget}">Show Budget For month</a><br>
-		<form th:action="@{/logout}" method="post">
-			<button type="submit" class="btn btn-danger">Logout</button>
-		</form>
-	</div>
-	
-	<div class="row mt-4">
-	    <div class="col-md-4">
-	        <div class="card text-white bg-success p-3">
-	            <h5>Total Income</h5>
-	            <h3 th:text="${summary.income}">0</h3>
-	        </div>
-	    </div>
-	    <div class="col-md-4">
-	        <div class="card text-white bg-danger p-3">
-	            <h5>Total Expense</h5>
-	            <h3 th:text="${summary.expense}">0</h3>
-	        </div>
-	    </div>
-	    <div class="col-md-4">
-	        <div class="card text-white bg-primary p-3">
-	            <h5>Balance</h5>
-	            <h3 th:text="${summary.balance}">0</h3>
-	        </div>
-	    </div>
-	</div>
-	<div class="row mt-4">
-	    <div class="col-md-6">
-	        <h5>Expense by Category</h5>
-	        <div style="max-width: 400px; max-height: 400px;">
-	            <canvas id="expenseChart"></canvas>
-	        </div>
-	    </div>
-	</div>
-</body>
-<script th:inline="javascript">
-    var categoryData = /*[[${categoryExpense}]]*/ {};
-    
-    var labels = Object.keys(categoryData);
-    var values = Object.values(categoryData);
 
-    new Chart(document.getElementById('expenseChart'), {
-        type: 'pie',
-        data: {
-            labels: labels,
-            datasets: [{
-                data: values,
-                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#C9CBCF', '#FF6384']
-            }]
-        }
-    });
-</script>
+	<div class="sidebar">
+		<div class="brand">
+			<div class="brand-mark">S</div>
+			<div class="brand-name">SmartSpend</div>
+		</div>
+
+		<div class="nav-section-label">Overview</div>
+		<a th:href="@{/dashboard}" class="nav-link-item active"><span class="nav-icon">▦</span> Dashboard</a>
+
+		<div class="nav-section-label">Transactions</div>
+		<a th:href="@{/transaction}" class="nav-link-item"><span class="nav-icon">＋</span> Add Transaction</a>
+		<a th:href="@{/transaction/list}" class="nav-link-item"><span class="nav-icon">≡</span> Transaction List</a>
+
+		<div class="nav-section-label">Budget</div>
+		<a th:href="@{/budget}" class="nav-link-item"><span class="nav-icon">◔</span> Add Budget</a>
+		<a th:href="@{/showBudget}" class="nav-link-item"><span class="nav-icon">▤</span> Budget List</a>
+
+		<div class="sidebar-foot">
+			<form th:action="@{/logout}" method="post">
+				<button type="submit" class="logout-btn">Logout</button>
+			</form>
+		</div>
+	</div>
+
+	<div class="main">
+		<div class="topbar">
+			<div>
+				<div class="greeting-eyebrow">Dashboard</div>
+				<div class="greeting-title">Welcome to SmartSpend</div>
+			</div>
+			<div class="user-chip">
+				<div class="avatar" th:text="${#strings.toUpperCase(#strings.substring(username,0,1))}">P</div>
+				<span th:text="${username}">user@example.com</span>
+			</div>
+		</div>
+
+		<div class="summary-row">
+			<div class="sum-card income">
+				<div class="sum-label">Total Income <span class="sum-icon">↑</span></div>
+				<div class="sum-value" th:text="'₹' + ${summary.income}">₹0</div>
+				<div class="sum-sub">This month</div>
+			</div>
+			<div class="sum-card expense">
+				<div class="sum-label">Total Expense <span class="sum-icon">↓</span></div>
+				<div class="sum-value" th:text="'₹' + ${summary.expense}">₹0</div>
+				<div class="sum-sub">This month</div>
+			</div>
+			<div class="sum-card balance">
+				<div class="sum-label">Balance <span class="sum-icon">＝</span></div>
+				<div class="sum-value" th:text="'₹' + ${summary.balance}">₹0</div>
+				<div class="sum-sub">Available to spend</div>
+			</div>
+		</div>
+
+		<div class="charts-row">
+			<div class="chart-card">
+				<div class="chart-card-head">
+					<div class="chart-title">Expense by Category</div>
+					<div class="chart-period">This month</div>
+				</div>
+				<div class="chart-wrap"><canvas id="expenseChart"></canvas></div>
+			</div>
+			<div class="chart-card">
+				<div class="chart-card-head">
+					<div class="chart-title">Income vs Expense</div>
+					<div class="chart-period">Last 3 months</div>
+				</div>
+				<div class="chart-wrap"><canvas id="barChart"></canvas></div>
+			</div>
+		</div>
+
+		<div class="quick-actions">
+			<a th:href="@{/transaction}" class="action-card">
+				<div class="action-ic">＋</div>
+				<div>
+					<div class="action-text-label">Add Transaction</div>
+					<div class="action-text-sub">Log income or expense</div>
+				</div>
+			</a>
+			<a th:href="@{/transaction/list}" class="action-card">
+				<div class="action-ic">≡</div>
+				<div>
+					<div class="action-text-label">View Transactions</div>
+					<div class="action-text-sub">All your history</div>
+				</div>
+			</a>
+			<a th:href="@{/budget}" class="action-card">
+				<div class="action-ic">◔</div>
+				<div>
+					<div class="action-text-label">Set Budget</div>
+					<div class="action-text-sub">Per category, monthly</div>
+				</div>
+			</a>
+			<a th:href="@{/showBudget}" class="action-card">
+				<div class="action-ic">▤</div>
+				<div>
+					<div class="action-text-label">View Budgets</div>
+					<div class="action-text-sub">Track your limits</div>
+				</div>
+			</a>
+		</div>
+	</div>
+
+	<script th:inline="javascript">
+		var categoryData = /*[[${categoryExpense}]]*/ {};
+		var labels = Object.keys(categoryData);
+		var values = Object.values(categoryData);
+		var palette = ['#22a55c', '#f59e0b', '#3b82f6', '#ef4444', '#8b5cf6', '#06b6d4', '#ec4899', '#84cc16'];
+
+		new Chart(document.getElementById('expenseChart'), {
+			type: 'doughnut',
+			data: {
+				labels: labels,
+				datasets: [{
+					data: values,
+					backgroundColor: palette.slice(0, labels.length),
+					borderWidth: 0
+				}]
+			},
+			options: {
+				maintainAspectRatio: false,
+				plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 11.5 } } } },
+				cutout: '62%'
+			}
+		});
+
+		var lastThreeMonths = /*[[${lastThreeMonths}]]*/ {};
+
+		new Chart(document.getElementById('barChart'), {
+			type: 'bar',
+			data: {
+				labels: lastThreeMonths.months,
+				datasets: [
+					{
+						label: 'Income',
+						data: lastThreeMonths.income,
+						backgroundColor: '#22a55c',
+						borderRadius: 6,
+						maxBarThickness: 34
+					},
+					{
+						label: 'Expense',
+						data: lastThreeMonths.expense,
+						backgroundColor: '#d9534f',
+						borderRadius: 6,
+						maxBarThickness: 34
+					}
+				]
+			},
+			options: {
+				maintainAspectRatio: false,
+				plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 11.5 } } } },
+				scales: {
+					y: { beginAtZero: true, grid: { color: '#eef2ef' } },
+					x: { grid: { display: false } }
+				}
+			}
+		});
+	</script>
+
+</body>
 </html>

@@ -13,4 +13,5 @@ public interface TransactionService {
 	void deleteTransaction(Long id);
 	Map<String, Double> getDashboardSummary(String email);
 	Map<String, Double> getCategoryWiseExpense(String email);
+	public Map<String, Object> getLastThreeMonthsData(String email);
 }

@@ -52,10 +52,13 @@ public class UserController {
 	    
 	    @GetMapping("/dashboard")
 	    public String dashboard(Model model, Principal principal) {
-	    	Map<String, Double> summary = transactionService.getDashboardSummary(principal.getName());
-	    	Map<String, Double> categoryWiseExpense = transactionService.getCategoryWiseExpense(principal.getName());
-	    	model.addAttribute("summary",summary );
-	    	model.addAttribute("categoryExpense",categoryWiseExpense);
+	        Map<String, Double> summary = transactionService.getDashboardSummary(principal.getName());
+	        Map<String, Double> categoryWiseExpense = transactionService.getCategoryWiseExpense(principal.getName());
+	        Map<String, Object> lastThreeMonths = transactionService.getLastThreeMonthsData(principal.getName());
+
+	        model.addAttribute("summary", summary);
+	        model.addAttribute("categoryExpense", categoryWiseExpense);
+	        model.addAttribute("lastThreeMonths", lastThreeMonths);
 	        model.addAttribute("username", principal.getName());
 	        return "dashboard";
 	    }
