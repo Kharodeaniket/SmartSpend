@@ -1,4 +1,4 @@
-# 💰 SmartSpend — Personal Finance & Budget Tracker
+<img width="1900" height="807" alt="Screenshot 2026-06-30 175209" src="https://github.com/user-attachments/assets/dbe7fe84-2ad4-4d9c-90ca-502a2a4d3dbb" /># 💰 SmartSpend — Personal Finance & Budget Tracker
 
 SmartSpend is a full-stack personal finance management application that helps users track income and expenses, set category-wise monthly budgets, and visualize their spending habits through an interactive dashboard.
 
@@ -83,7 +83,9 @@ The schema is normalized around 4 core entities with clearly defined relationshi
 Categories are seeded automatically on application startup via `data.sql`, covering both income sources (Salary, Freelance, Loan, Pocket Money) and expense types (Food, Rent, Travel, Entertainment, Recharge, EMI, Medical, Other).
 
 ---
+## Screenshots
 
+![Dashboard](screenshots/dashboard.png)
 ## 📌 Key Technical Highlights
 
 - **Custom JPQL aggregate queries** to compute monthly income/expense totals and category-wise breakdowns directly at the database level for performance
