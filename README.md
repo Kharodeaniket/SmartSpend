@@ -8,12 +8,6 @@ Built from the ground up using **Spring Boot, Hibernate/JPA, Spring MVC, Spring 
 
 ## 🚀 Features
 
-### 🔐 Authentication & Security
-- Secure user registration and login powered by **Spring Security**
-- Passwords hashed using **BCrypt** — never stored in plain text
-- Role-based structure (`USER`, `ADMIN`) for future extensibility
-- Custom `UserDetailsService` implementation for database-backed authentication
-
 ### 💸 Transaction Management
 - Add, edit, and delete income/expense transactions
 - Transactions linked to predefined categories (Food, Rent, Travel, Salary, EMI, etc.)
@@ -37,7 +31,6 @@ Built from the ground up using **Spring Boot, Hibernate/JPA, Spring MVC, Spring 
 | Layer | Technology |
 |---|---|
 | **Backend** | Java, Spring Boot, Spring MVC |
-| **Security** | Spring Security, BCrypt |
 | **ORM / Persistence** | Hibernate, Spring Data JPA |
 | **Database** | PostgreSQL |
 | **Frontend** | Thymeleaf, Bootstrap 5, Chart.js |
@@ -109,7 +102,7 @@ SmartSpend was built to demonstrate practical, real-world full-stack skills rele
 
 ## 👤 Author
 
-**Pratik (Bapurao) Jadhav**
+** Aniket Kharode **
 Java Full Stack Developer
 📍 Open to relocation across India
 🔗 [GitHub](https://github.com/Bapurao-jadhav)
