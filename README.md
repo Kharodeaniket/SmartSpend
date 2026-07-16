@@ -105,7 +105,7 @@ SmartSpend was built to demonstrate practical, real-world full-stack skills rele
 ** Aniket Kharode **
 Java Full Stack Developer
 📍 Open to relocation across India
-🔗 [GitHub](https://github.com/Bapurao-jadhav)
+🔗 [GitHub](https://github.com/Kharodeaniket)
 
 ---
 
